@@ -1,3 +1,6 @@
+package Calculator;
+
+import DataProduct.Product;
 import java.util.List;
 
 public class Calculator {
