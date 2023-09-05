@@ -255,47 +255,61 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Редактирует калорийность выбранного продукта из списка. Пользователю предоставляется
+   * возможность выбора продукта по номеру или имени. После успешного выбора продукта пользователь
+   * вводит новую калорийность для продукта. Метод также сохраняет обновленный список продуктов в
+   * файл после изменения калорийности. Если пользователь вводит "STOP", редактирование
+   * прекращается. В случае ошибки при выборе продукта или вводе калорийности, метод выводит
+   * соответствующие сообщения об ошибках.
+   *
+   * @param products Список продуктов для редактирования.
+   */
   public void editProductCalories(List<Product> products) {
     displayProductsInColumns(products);
-    System.out.println(
-        "\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP\033[0m \033[1;36mдля завершения:\033[0m");
-    String input = scanner.nextLine();
-    if ("STOP".equalsIgnoreCase(input)) {
-      return;
-    }
 
-    try {
-      int index = -1;
-
-      try {
-        index = Integer.parseInt(input) - 1;
-      } catch (NumberFormatException e) {
-        for (int i = 0; i < products.size(); i++) {
-          if (products.get(i).getName().equalsIgnoreCase(input)) {
-            index = i;
-            break;
-          }
-        }
-      }
-
-      if (index < 0 || index >= products.size()) {
-        System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
+    while (true) {
+      System.out.println(
+          "\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP\033[0m \033[1;36mдля завершения:\033[0m");
+      String input = scanner.nextLine();
+      if ("STOP".equalsIgnoreCase(input)) {
         return;
       }
 
+      int index = getProductIndex(products, input);
+      if (index == -1) {
+        System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
+        continue;
+      }
+
       System.out.println("Введите новую калорийность продукта (ккал на 100г):");
-      double newCalories = Double.parseDouble(scanner.nextLine());
+      double newCalories = inputDoublePosNumber();
+      if (newCalories < 0) {
+        System.out.println("Калорийность не может быть отрицательной. Попробуйте снова.");
+        continue;
+      }
 
       products.get(index).setCalories(newCalories);
-
-      // Сохраняем обновленный список продуктов в файл
       storage.saveProducts(products);
-
-      System.out.println("Калорийность продукта " + products.get(index).getName() + " изменена на " + newCalories + " ккал/100г");
-
-    } catch (Exception e) {
-      System.out.println("Ошибка при изменении калорийности продукта. Попробуйте снова.");
+      System.out.println(
+          "Калорийность продукта " + products.get(index).getName() + " изменена на " + newCalories + " ккал/100г");
+      break;
     }
   }
 
+  private int getProductIndex(List<Product> products, String input) {
+    try {
+      int index = Integer.parseInt(input) - 1;
+      if (index >= 0 && index < products.size()) {
+        return index;
+      }
+    } catch (NumberFormatException e) {
+      for (int i = 0; i < products.size(); i++) {
+        if (products.get(i).getName().equalsIgnoreCase(input)) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
 }
