@@ -25,14 +25,6 @@ public class UserInterface {
       while (true) {
         try {
           System.out.println("\n\t\t\t\t\t\033[1;94mГлавное меню\033[0m");
-
-
-
-
-
-
-
-
           int optionNumber = 1;
           for (MenuAction action : MenuAction.values()) {
             System.out.println(optionNumber + ". " + action.getDescription());
@@ -201,67 +193,20 @@ public class UserInterface {
    */
   private void displayProductsInColumns(List<Product> products) {
     System.out.println(
-        "Список продуктов который есть в базе данных (Если вы не нашли ваш продукт, вы можете его самостоятельно добавить нажав на цифру 2.)");
-    int fifthSize = (products.size() + 4) / 5; // округляем вверх
+        "Список продуктов который есть в базе данных (Если вы не нашли ваш продукт, вы можете его самостоятельно добавить нажав на цифру 2.");
+
+    int numOfColumns = 5;
+    int fifthSize = (products.size() + numOfColumns - 1) / numOfColumns;
+
     for (int i = 0; i < fifthSize; i++) {
-      String firstColumn = (i + 1) + ". " + products.get(i).getName();
-
-      // Проверяем, есть ли продукт для второй колонки
-      String secondColumn = "";
-      if (i + fifthSize < products.size()) {
-        secondColumn = (i + fifthSize + 1) + ". " + products.get(i + fifthSize).getName();
+      for (int j = 0; j < numOfColumns; j++) {
+        int index = i + j * fifthSize;
+        if (index < products.size()) {
+          System.out.printf("%-35s", (index + 1) + ". " + products.get(index).getName());
+        } else {
+          System.out.printf("%-35s", "");
+        }
       }
-
-      // Проверяем, есть ли продукт для третьей колонки
-      String thirdColumn = "";
-      if (i + 2 * fifthSize < products.size()) {
-        thirdColumn = (i + 2 * fifthSize + 1) + ". " + products.get(i + 2 * fifthSize).getName();
-      }
-
-      // Проверяем, есть ли продукт для четвертой колонки
-      String fourthColumn = "";
-      if (i + 3 * fifthSize < products.size()) {
-        fourthColumn = (i + 3 * fifthSize + 1) + ". " + products.get(i + 3 * fifthSize).getName();
-      }
-
-      // Проверяем, есть ли продукт для пятой колонки
-      String fifthColumn = "";
-      if (i + 4 * fifthSize < products.size()) {
-        fifthColumn = (i + 4 * fifthSize + 1) + ". " + products.get(i + 4 * fifthSize).getName();
-      }
-
-      // Выводим в пять колонок, выравнивая по левому краю
-      System.out.printf("%-35s %-35s %-35s %-35s %-35s%n", firstColumn, secondColumn, thirdColumn,
-          fourthColumn, fifthColumn);
+      System.out.println();
     }
   }
-
-  /**
-   * Безопасно получает от пользователя положительное число типа Double.
-   *
-   * @return Возвращает положительное число типа Double.
-   */
-  public static Double inputDoublePosNumber() {
-    Scanner scanner = new Scanner(System.in);
-    while (!scanner.hasNextInt()) {
-      System.out.println("Введите, пожалуйста, число. Повторите ввод");
-      scanner.next();
-    }
-    Double n = scanner.nextDouble();
-    while (n <= 0) {
-      System.out.println("Вы ввели отрицательное число. Введите число больше нуля:");
-      n = scanner.nextDouble();
-    }
-    return n;
-  }
-  private int inputInt(String promptMessage) {
-    while (true) {
-      System.out.println(promptMessage);
-      try {
-        return Integer.parseInt(scanner.nextLine());
-      } catch (NumberFormatException e) {
-        System.out.println("Введите целое число.");
-      }
-    }
-  }
-}
