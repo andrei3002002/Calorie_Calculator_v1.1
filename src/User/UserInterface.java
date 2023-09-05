@@ -292,7 +292,8 @@ public class UserInterface {
       products.get(index).setCalories(newCalories);
       storage.saveProducts(products);
       System.out.println(
-          "Калорийность продукта " + products.get(index).getName() + " изменена на " + newCalories + " ккал/100г");
+          "Калорийность продукта " + products.get(index).getName() + " изменена на " + newCalories
+              + " ккал/100г");
       break;
     }
   }
