@@ -219,14 +219,14 @@ public class UserInterface {
    */
   public static Double inputDoublePosNumber() {
     Scanner scanner = new Scanner(System.in);
-    while (!scanner.hasNextInt()) {
+    while (!scanner.hasNextDouble()) {
       System.out.println("Введите, пожалуйста, число. Повторите ввод");
       scanner.next();
     }
     Double n = scanner.nextDouble();
-    while (n <= 0) {
-      System.out.println("Вы ввели отрицательное число. Введите число больше нуля:");
-      n = scanner.nextDouble();
+    while (n < 0) {
+      System.out.println("Вы ввели отрицательное число. Введите положительное число:");
+      n = inputDoublePosNumber();
     }
     return n;
   }
