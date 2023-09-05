@@ -69,7 +69,7 @@ public class UserInterface {
    */
   private void calculateTotalCalories(List<Product> products) {
     double totalCalories = 0.0;
-    StringBuilder result = new StringBuilder();  // Новый StringBuilder
+    StringBuilder result = new StringBuilder();
 
     displayProductsInColumns(products);
 
@@ -77,30 +77,22 @@ public class UserInterface {
       System.out.println(
           "\n\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP или 0\033[0m \033[1;36mдля завершения:\033[0m");
       String input = scanner.nextLine();
+
       if ("STOP".equalsIgnoreCase(input) || "0".equalsIgnoreCase(input)) {
         break;
       }
 
+      int index = getProductIndex(products,
+          input); // используем функцию для получения индекса продукта
+
+      if (index < 0) {
+        System.out.println("\033[1;31mНеверное имя или номер продукта. Попробуйте снова.\033[0m");
+        continue;
+      }
+
+      System.out.println("Введите вес продукта в граммах:");
+
       try {
-        int index = -1;
-
-        try {
-          index = Integer.parseInt(input) - 1;
-        } catch (NumberFormatException e) {
-          for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getName().equalsIgnoreCase(input)) {
-              index = i;
-              break;
-            }
-          }
-        }
-
-        if (index < 0 || index >= products.size()) {
-          System.out.println("\033[1;31mНеверное имя или номер продукта. Попробуйте снова.\033[0m");
-          continue;
-        }
-
-        System.out.println("Введите вес продукта в граммах:");
         double weight = inputDoublePosNumber();
         totalCalories += (products.get(index).getCalories() * weight) / 100;
 
@@ -163,19 +155,19 @@ public class UserInterface {
    */
   private void viewCalories(List<Product> products) {
     displayProductsInColumns(products);
-    System.out.println("\033[1;36mВведите номер продукта: \033[0m");
-    try {
-      int index =
-          Integer.parseInt(scanner.nextLine()) - 1; // Изменено для обработки исключения
-      if (index >= 0 && index < products.size()) {
-        System.out.println(
-            "Калорийность продукта " + products.get(index).getName() + ": " + products.get(
-                index).getCalories() + " ккал/100г");
-      } else {
-        System.out.println("Неверный номер.");
-      }
-    } catch (NumberFormatException e) {
-      System.out.println("Ошибка: было введено не целое число. Попробуйте снова.");
+    System.out.println(
+        "\033[1;36mВведите номер или имя продукта: \033[0m"); // Изменил строку для большей ясности
+
+    String input = scanner.nextLine();
+    int index = getProductIndex(products,
+        input); // используем функцию для получения индекса продукта
+
+    if (index != -1) {
+      System.out.println(
+          "Калорийность продукта " + products.get(index).getName() + ": " + products.get(
+              index).getCalories() + " ккал/100г");
+    } else {
+      System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
     }
   }
 
@@ -184,7 +176,6 @@ public class UserInterface {
    *
    * @param products Список всех доступных продуктов.
    */
-
   private void displayProductsInColumns(List<Product> products) {
     System.out.println(
         "Список продуктов который есть в базе данных (Если вы не нашли ваш продукт, вы можете его самостоятельно добавить нажав на цифру 2.");
@@ -267,6 +258,15 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Возвращает индекс продукта в списке на основе введенной строки. Входная строка может быть либо
+   * числом (представляющим индекс продукта), либо именем продукта.
+   *
+   * @param products Список всех доступных продуктов.
+   * @param input    Введенная пользователем строка, которая может быть либо числом (индексом
+   *                 продукта), либо именем продукта.
+   * @return Индекс продукта в списке. Если продукт не найден, возвращает -1.
+   */
   private int getProductIndex(List<Product> products, String input) {
     try {
       int index = Integer.parseInt(input) - 1;
