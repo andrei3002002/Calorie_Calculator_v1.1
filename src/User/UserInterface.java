@@ -55,6 +55,10 @@ public class UserInterface {
           addNewProduct(products);
           break;
 
+        case EDIT_PRODUCT:
+          editProductCalories(products);
+          break;
+
         case VIEW_CALORIES:
           viewCalories(products);
           break;
@@ -250,4 +254,48 @@ public class UserInterface {
       }
     }
   }
+
+  public void editProductCalories(List<Product> products) {
+    displayProductsInColumns(products);
+    System.out.println(
+        "\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP\033[0m \033[1;36mдля завершения:\033[0m");
+    String input = scanner.nextLine();
+    if ("STOP".equalsIgnoreCase(input)) {
+      return;
+    }
+
+    try {
+      int index = -1;
+
+      try {
+        index = Integer.parseInt(input) - 1;
+      } catch (NumberFormatException e) {
+        for (int i = 0; i < products.size(); i++) {
+          if (products.get(i).getName().equalsIgnoreCase(input)) {
+            index = i;
+            break;
+          }
+        }
+      }
+
+      if (index < 0 || index >= products.size()) {
+        System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
+        return;
+      }
+
+      System.out.println("Введите новую калорийность продукта (ккал на 100г):");
+      double newCalories = Double.parseDouble(scanner.nextLine());
+
+      products.get(index).setCalories(newCalories);
+
+      // Сохраняем обновленный список продуктов в файл
+      storage.saveProducts(products);
+
+      System.out.println("Калорийность продукта " + products.get(index).getName() + " изменена на " + newCalories + " ккал/100г");
+
+    } catch (Exception e) {
+      System.out.println("Ошибка при изменении калорийности продукта. Попробуйте снова.");
+    }
+  }
+
 }

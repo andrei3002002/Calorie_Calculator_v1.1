@@ -7,8 +7,9 @@ package User;
 public enum MenuAction {
   VIEW_PRODUCTS("Просмотреть список продуктов"),
   ADD_PRODUCT("\tДобавить новый продукт"),
-  VIEW_CALORIES("\t\tПосмотреть калорийность продукта"),
-  CALCULATE_TOTAL_CALORIES("\t\t\tРассчитать общую калорийность продуктов"),
+  EDIT_PRODUCT("\t\tИзменить калорийность продуктов. "),
+  VIEW_CALORIES("\t\t\tПосмотреть калорийность продукта"),
+  CALCULATE_TOTAL_CALORIES("\t\t\t\tРассчитать общую калорийность продуктов"),
   EXIT("\033[1;31mВыйти\033[0m");
 
   private final String description;

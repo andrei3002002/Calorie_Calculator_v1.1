@@ -26,4 +26,8 @@ public class Product {
   public double getCalories() {
     return calories;
   }
+
+  public void setCalories(double newCalories) {
+    this.calories = newCalories;
+  }
 }
