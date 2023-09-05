@@ -191,6 +191,7 @@ public class UserInterface {
    *
    * @param products Список всех доступных продуктов.
    */
+
   private void displayProductsInColumns(List<Product> products) {
     System.out.println(
         "Список продуктов который есть в базе данных (Если вы не нашли ваш продукт, вы можете его самостоятельно добавить нажав на цифру 2.");
@@ -210,3 +211,34 @@ public class UserInterface {
       System.out.println();
     }
   }
+
+  /**
+   * Безопасно получает от пользователя положительное число типа Double.
+   *
+   * @return Возвращает положительное число типа Double.
+   */
+  public static Double inputDoublePosNumber() {
+    Scanner scanner = new Scanner(System.in);
+    while (!scanner.hasNextInt()) {
+      System.out.println("Введите, пожалуйста, число. Повторите ввод");
+      scanner.next();
+    }
+    Double n = scanner.nextDouble();
+    while (n <= 0) {
+      System.out.println("Вы ввели отрицательное число. Введите число больше нуля:");
+      n = scanner.nextDouble();
+    }
+    return n;
+  }
+
+  private int inputInt(String promptMessage) {
+    while (true) {
+      System.out.println(promptMessage);
+      try {
+        return Integer.parseInt(scanner.nextLine());
+      } catch (NumberFormatException e) {
+        System.out.println("Введите целое число.");
+      }
+    }
+  }
+}
