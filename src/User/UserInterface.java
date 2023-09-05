@@ -93,9 +93,9 @@ public class UserInterface {
 
     while (!isEnd) {
       System.out.println(
-          "\n\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP\033[0m \033[1;36mдля завершения:\033[0m");
+          "\n\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP или 0\033[0m \033[1;36mдля завершения:\033[0m");
       String input = scanner.nextLine();
-      if ("STOP".equalsIgnoreCase(input)) {
+      if ("STOP".equalsIgnoreCase(input) || "0".equalsIgnoreCase(input)) {
         isEnd = true;
         break;
       }
