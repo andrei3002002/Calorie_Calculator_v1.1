@@ -56,21 +56,7 @@ public class UserInterface {
           break;
 
         case VIEW_CALORIES:
-          displayProductsInColumns(products);
-          System.out.println("\033[1;36mВведите номер продукта: \033[0m");
-          try {
-            int index =
-                Integer.parseInt(scanner.nextLine()) - 1; // Изменено для обработки исключения
-            if (index >= 0 && index < products.size()) {
-              System.out.println(
-                  "Калорийность продукта " + products.get(index).getName() + ": " + products.get(
-                      index).getCalories() + " ккал/100г");
-            } else {
-              System.out.println("Неверный номер.");
-            }
-          } catch (NumberFormatException e) {
-            System.out.println("Ошибка: было введено не целое число. Попробуйте снова.");
-          }
+          viewCalories(products);
           break;
 
         case CALCULATE_TOTAL_CALORIES:
@@ -184,6 +170,29 @@ public class UserInterface {
         System.out.println("Ошибка при добавлении продукта. Попробуйте снова.");
       }
     } while (!isInputCorrect);
+  }
+
+  /**
+   * Отображает калорийность выбранного продукта из списка.
+   *
+   * @param products Список продуктов для выбора.
+   */
+  private void viewCalories(List<Product> products) {
+    displayProductsInColumns(products);
+    System.out.println("\033[1;36mВведите номер продукта: \033[0m");
+    try {
+      int index =
+          Integer.parseInt(scanner.nextLine()) - 1; // Изменено для обработки исключения
+      if (index >= 0 && index < products.size()) {
+        System.out.println(
+            "Калорийность продукта " + products.get(index).getName() + ": " + products.get(
+                index).getCalories() + " ккал/100г");
+      } else {
+        System.out.println("Неверный номер.");
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Ошибка: было введено не целое число. Попробуйте снова.");
+    }
   }
 
   /**
