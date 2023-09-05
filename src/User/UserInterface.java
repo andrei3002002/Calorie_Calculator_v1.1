@@ -149,27 +149,44 @@ public class UserInterface {
   }
 
   /**
-   * Отображает калорийность выбранного продукта из списка.
+   * Отображает информацию о калорийности выбранного пользователем продукта из списка. Пользователь
+   * может продолжить выбор продукта или вернуться в главное меню.
    *
-   * @param products Список продуктов для выбора.
+   * @param products Список продуктов для отображения и выбора.
    */
   private void viewCalories(List<Product> products) {
-    displayProductsInColumns(products);
-    System.out.println(
-        "\033[1;36mВведите номер или имя продукта: \033[0m"); // Изменил строку для большей ясности
+    while (true) {
+      displayProductsInColumns(products);
+      System.out.println("\033[1;36mВведите номер или имя продукта: \033[0m");
 
-    String input = scanner.nextLine();
-    int index = getProductIndex(products,
-        input); // используем функцию для получения индекса продукта
+      String input = scanner.nextLine();
+      int index = getProductIndex(products, input);
 
-    if (index != -1) {
-      System.out.println(
-          "Калорийность продукта " + products.get(index).getName() + ": " + products.get(
-              index).getCalories() + " ккал/100г");
-    } else {
-      System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
+      if (index != -1) {
+        System.out.println("\033[1;33mКалорийность продукта " + products.get(index).getName() + ": "
+            + products.get(index).getCalories() + " ккал/100г\033[0m");
+
+        System.out.println("\033[1;36mЧто вы хотите сделать дальше? \033[0m");
+        System.out.println("1. Просмотреть другой продукт");
+        System.out.println("2. Вернуться в главное меню");
+
+        String choice = scanner.nextLine();
+
+        switch (choice) {
+          case "1":
+            break;
+          case "2":
+            run();
+            return;
+          default:
+            System.out.println("\033[1;31mНеверный выбор. Попробуйте ещё раз.\033[0m");
+        }
+      } else {
+        System.out.println("\033[1;31mНеверное имя или номер продукта. Попробуйте снова.\033[0m");
+      }
     }
   }
+
 
   /**
    * Отображает список продуктов в формате пяти колонок.
