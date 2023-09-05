@@ -7,8 +7,8 @@ import DataProduct.*;
 
 public class UserInterface {
 
-  private Scanner scanner;
-  private ProductStorage storage;
+  private final Scanner scanner;
+  private final ProductStorage storage;
 
   public UserInterface() {
     this.scanner = new Scanner(System.in);
@@ -47,34 +47,17 @@ public class UserInterface {
       }
       // Обработка выбора пользователя
       switch (MenuAction.values()[choice - 1]) {
-        case VIEW_PRODUCTS:
-          displayProductsInColumns(products);
-          break;
-
-        case ADD_PRODUCT:
-          addNewProduct(products);
-          break;
-
-        case EDIT_PRODUCT:
-          editProductCalories(products);
-          break;
-
-        case VIEW_CALORIES:
-          viewCalories(products);
-          break;
-
-        case CALCULATE_TOTAL_CALORIES:
-          calculateTotalCalories(products);
-          break;
-
-        case EXIT:
+        case VIEW_PRODUCTS -> displayProductsInColumns(products);
+        case ADD_PRODUCT -> addNewProduct(products);
+        case EDIT_PRODUCT -> editProductCalories(products);
+        case VIEW_CALORIES -> viewCalories(products);
+        case CALCULATE_TOTAL_CALORIES -> calculateTotalCalories(products);
+        case EXIT -> {
           System.out.println("До свидания!");
           scanner.close();
           return;
-
-        default:
-          System.out.println("Неверный ввод. Попробуйте снова.");
-          break;
+        }
+        default -> System.out.println("Неверный ввод. Попробуйте снова.");
       }
     }
   }
@@ -86,17 +69,15 @@ public class UserInterface {
    */
   private void calculateTotalCalories(List<Product> products) {
     double totalCalories = 0.0;
-    boolean isEnd = false;
     StringBuilder result = new StringBuilder();  // Новый StringBuilder
 
     displayProductsInColumns(products);
 
-    while (!isEnd) {
+    while (true) {
       System.out.println(
           "\n\033[1;36mВыберите продукт (введите номер или название) или введите\033[0m \033[1;31mSTOP или 0\033[0m \033[1;36mдля завершения:\033[0m");
       String input = scanner.nextLine();
       if ("STOP".equalsIgnoreCase(input) || "0".equalsIgnoreCase(input)) {
-        isEnd = true;
         break;
       }
 
@@ -115,7 +96,7 @@ public class UserInterface {
         }
 
         if (index < 0 || index >= products.size()) {
-          System.out.println("Неверное имя или номер продукта. Попробуйте снова.");
+          System.out.println("\033[1;31mНеверное имя или номер продукта. Попробуйте снова.\033[0m");
           continue;
         }
 
@@ -138,7 +119,6 @@ public class UserInterface {
     }
 
     System.out.println("Общая калорийность выбранных продуктов:");
-    System.out.println(result.toString());  // Выводим подробную информацию
     System.out.println("\033[1;33mИтого: " + totalCalories + " ккал\033[0m");
   }
 
@@ -242,17 +222,6 @@ public class UserInterface {
       n = inputDoublePosNumber();
     }
     return n;
-  }
-
-  private int inputInt(String promptMessage) {
-    while (true) {
-      System.out.println(promptMessage);
-      try {
-        return Integer.parseInt(scanner.nextLine());
-      } catch (NumberFormatException e) {
-        System.out.println("Введите целое число.");
-      }
-    }
   }
 
   /**
